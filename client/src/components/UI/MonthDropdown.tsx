@@ -7,6 +7,7 @@ interface MonthDropdownProps {
 const MonthDropdown:React.FC<MonthDropdownProps> = ({set}) => {
   return (
     <select
+      defaultValue={3}
     onChange={(e) => set((_prev)=>parseInt(e.target.value))}
     id="countries"
     className="bg-transparent border border-[#A35709] text-gray-300 text-sm rounded-lg focus:ring-[#A35709] focus:border-[#A35709] block w-full p-2.5"

@@ -25,6 +25,7 @@ export const initializeDb = async (req: Request, res: Response) => {
 export const allTransactions = async (req: Request, res: Response) => {
   try {
     const { search, month } = req.query;
+    let limit= Number(req.query.limit) || 10;
     let page = parseInt(req.query.page as string) || 1;
     let query: any = {};
     if (search) {
@@ -32,7 +33,15 @@ export const allTransactions = async (req: Request, res: Response) => {
         $or: [
           { title: { $regex: search, $options: "i" } },
           { description: { $regex: search, $options: "i" } },
-          { price: typeof search === "number" ? search : "" },
+          {
+            $expr: {
+              $regexMatch: {
+                input: { $toString: "$price" },
+                regex: search,
+                options: "i",
+              },
+            },
+          },
         ],
       };
     }
@@ -45,10 +54,10 @@ export const allTransactions = async (req: Request, res: Response) => {
     let docCount = await TransactionModel.countDocuments(query);
     const transactions = await TransactionModel.aggregate([
       { $match: { ...query } },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
     ]);
-    docCount = docCount - 10 * page
+    docCount = docCount - limit * page
     if (docCount < 0) {
       docCount=0
     }

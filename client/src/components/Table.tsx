@@ -22,7 +22,7 @@ const Table = () => {
   useEffect(() => {
     async function getData() {
       const response = await axios.get(
-        `http://localhost:3000/api/alltransactions?month=${month}&search=${search}&page=${page}`
+        `http://localhost:3000/api/alltransactions?month=${month}&search=${search}&page=${page}&limit=${5}`
       );
       setData(response.data.data);
       setCount(response.data.docCount)
@@ -81,7 +81,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody className="text-[#F0E3CA] border">
-          {data.length > 0 &&
+          {data.length > 0 ?
             data.map((item: Transaction) => (
               <tr className="border-b border border-spacing-3 border-[#A35709] p-2">
                 <th
@@ -99,20 +99,12 @@ const Table = () => {
                   <img className="w-10" src={item.image} alt="" />
                 </td>
               </tr>
-            ))}
+            )) : <tr className=" text-lg text-center"><td colSpan={7} className="p-2">No data</td></tr>}
         </tbody>
       </table>
       <div className="flex justify-center mt-4 text-white items-center mb-1">
-      <p className={`${page==1&&"hidden"}`} onClick={()=>setPage((prev)=>prev-1)}>prev</p>
-        {[...Array(count)].map((_, index) => <button
-          onClick={()=>setPage(index+1)}
-          key={index}
-          className={`px-2 py-1 mx-1 rounded text-[#FF8303]`}
-        >
-          {index+1}
-        </button>)
-        }
-       <p className={`${page==count+1&&"hidden"}`} onClick={()=>setPage((prev)=>prev+1)}>next</p>
+      <p className={`${page==1&&"hidden"}  border border-[#A35709] p-2 mr-3 rounded-lg`} onClick={()=>setPage((prev)=>prev-1)}>Prev page</p>
+       <p className={`${page>=count&&"hidden"} border border-[#A35709] p-2 rounded-lg`} onClick={()=>setPage((prev)=>prev+1)}>Next page</p>
       </div>
     </div>
   );
