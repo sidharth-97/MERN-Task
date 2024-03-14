@@ -1,15 +1,4 @@
 
-> cd MERN-Task
-
-cd client
-
-npm run dev
-
-cd .\server\
-
-.env
-
-
 ## Getting Started
 
 1. **Clone the Repository:**
