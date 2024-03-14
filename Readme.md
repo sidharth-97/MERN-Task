@@ -21,6 +21,11 @@ In the server folder add a .env file and add following variables
     ```bash
     MONGO_URI= your mongodb url string
     ```
+in the client folder add a .env file and add following variables
+
+    ```bash
+    VITE_BACKEND_URL= your backend domain
+    ```
 
 4. **Run the application:**
 Navigate to client and server folder in different terminal and run the following command

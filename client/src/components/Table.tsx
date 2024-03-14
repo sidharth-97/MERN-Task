@@ -22,7 +22,7 @@ const Table = () => {
   useEffect(() => {
     async function getData() {
       const response = await axios.get(
-        `http://localhost:3000/api/alltransactions?month=${month}&search=${search}&page=${page}&limit=${5}`
+        `${import.meta.env.VITE_BACKEND_URL}api/alltransactions?month=${month}&search=${search}&page=${page}&limit=${5}`
       );
       setData(response.data.data);
       setCount(response.data.docCount)

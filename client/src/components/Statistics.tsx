@@ -15,7 +15,7 @@ const Statistics = () => {
   useEffect(() => {
     async function getData() {
       const response = await axios.get(
-        `http://localhost:3000/api/Statistics?month=${month}`
+        `${import.meta.env.VITE_BACKEND_URL}api/Statistics?month=${month}`
       );
       setData(response.data.data);
     }

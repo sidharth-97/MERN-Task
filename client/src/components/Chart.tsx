@@ -17,7 +17,7 @@ const Barchart = () => {
   useEffect(() => {
     async function getData() {
       const response = await axios.get(
-        `http://localhost:3000/api/pricerange?month=${month}`
+        `${import.meta.env.VITE_BACKEND_URL}api/pricerange?month=${month}`
       );
       setData(
         response.data.data.sort((a: { _id: string }, b: { _id: any }) =>
