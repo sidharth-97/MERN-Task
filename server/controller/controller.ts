@@ -42,13 +42,17 @@ export const allTransactions = async (req: Request, res: Response) => {
         const monthRegex = `\\d{4}-${monthNumber.toString().padStart(2, '0')}-\\d{2}`;
         query.dateOfSale = { $regex: monthRegex };
       }
-    const docCount = await TransactionModel.countDocuments(query);
+    let docCount = await TransactionModel.countDocuments(query);
     const transactions = await TransactionModel.aggregate([
       { $match: { ...query } },
       { $skip: (page - 1) * 10 },
       { $limit: 10 },
     ]);
-    res.send({ status: 200, data: transactions, docCount });
+    docCount = docCount - 10 * page
+    if (docCount < 0) {
+      docCount=0
+    }
+    res.send({ status: 200, data: transactions, docCount});
   } catch (error) {
     console.error("Error fetching transactions:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
@@ -70,8 +74,9 @@ export const Statistics = async (req: Request, res: Response) => {
       { $match: { ...query } },
       {$group:{_id:null,sale:{$sum:"$price"},count:{$sum:1}}}
       ])
-      const unsold=count-result[0].count
-    res.send({status:200,data:result,unsold})
+      const unsold = count - result[0].count
+      result[0]["unsold"]=unsold
+    res.send({status:200,data:result[0]})
     } catch (error) {
         console.log(error);  
     }
